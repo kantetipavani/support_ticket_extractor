@@ -1,0 +1,36 @@
+# Support Ticket Structured Data Extraction
+
+## Overview
+This project uses an LLM to extract structured JSON data from unstructured customer support tickets.
+
+## Fields Extracted
+- issue_category
+- urgency (low / medium / high)
+- sentiment (positive / negative / neutral)
+- one_sentence_summary
+
+## Approach
+- Designed a strict system prompt to enforce JSON output
+- Used temperature = 0 for deterministic results
+- Implemented validation to ensure all fields are present
+- Added fallback logic to handle API failures
+
+## Test Cases
+- 5 normal tickets with different tones
+- 1 confusing ticket with mixed sentiment and unclear urgency
+
+## Confusing Case Insight
+- Added rules:
+  - Default urgency = medium if unclear
+  - Choose dominant sentiment if mixed
+
+## How to Run
+1. Set API key as environment variable:
+   setx OPENAI_API_KEY "your_key"
+
+2. Run:
+   python support_ticket_extractor.py
+
+## Notes
+- If API quota is exceeded, fallback logic is used
+- Ensures system always returns valid JSON
