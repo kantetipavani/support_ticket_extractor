@@ -1,10 +1,14 @@
 import json
 from typing import Dict
 from google import genai   
-
+# -----------------------------
+# SET YOUR API KEY HERE
+# -----------------------------
 
 client = genai.Client(api_key="AIzaSyDo-40Fj6lwmFWXRpE-3ilwtoN-_I1XQWY")  
-
+# -----------------------------
+# SYSTEM PROMPT
+# -----------------------------
 SYSTEM_PROMPT = """
 You are a strict JSON extraction system.
 
@@ -30,7 +34,9 @@ FORMAT:
   "one_sentence_summary": "..."
 }
 """
-
+# -----------------------------
+# FALLBACK
+# -----------------------------
 
 def fallback_extractor(ticket: str) -> Dict:
     text = ticket.lower()
@@ -71,7 +77,9 @@ def fallback_extractor(ticket: str) -> Dict:
         "one_sentence_summary": summary
     }
 
-
+# -----------------------------
+# EXTRACTION
+# -----------------------------
 def extract_ticket_data(ticket: str) -> Dict:
     prompt = SYSTEM_PROMPT + "\n\nTicket:\n" + ticket
 
@@ -88,7 +96,9 @@ def extract_ticket_data(ticket: str) -> Dict:
         print("API ERROR:", e)
         print("Using fallback...\n")
         return fallback_extractor(ticket)
-
+# -----------------------------
+# VALIDATION
+# -----------------------------
 
 def validate_output(data: Dict):
     required = ["issue_category", "urgency", "sentiment", "one_sentence_summary"]
@@ -99,6 +109,9 @@ def validate_output(data: Dict):
 
     print("Output validated\n")
 
+# -----------------------------
+# TEST CASES
+# -----------------------------
 
 tickets = [
     "My internet has been down for 3 days and no one is responding!",
@@ -116,7 +129,9 @@ for i, t in enumerate(tickets, 1):
     print(json.dumps(result, indent=2))
     validate_output(result)
 
-
+# -----------------------------
+# CONFUSING CASE
+# -----------------------------
 confusing_ticket = """
 The app sometimes works and sometimes logs me out.
 It’s frustrating but not terrible. Not urgent unless it gets worse.
